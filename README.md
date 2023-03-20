@@ -1,3 +1,3 @@
 # stock-simulator
 
-# the project is still in the making but it will be out soon!
+# This project is still in development, but it will be done soon!
