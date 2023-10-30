@@ -14,5 +14,5 @@ def display_letter_by_letter(text):
 
 # Example usage
 clear_screen()  # Clear the screen
-text_to_display = "This is the text I want to display letter by letter."
+text_to_display = "Starting program..."
 display_letter_by_letter(text_to_display)
