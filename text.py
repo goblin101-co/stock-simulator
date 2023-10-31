@@ -13,6 +13,6 @@ def display_letter_by_letter(text):
     print()
 
 # Example usage
-clear_screen()  # Clear the screen
-text_to_display = "Starting program..."
-display_letter_by_letter(text_to_display)
+# clear_screen()  # Clear the screen
+# text_to_display = "Starting program..."
+# display_letter_by_letter(text_to_display)
