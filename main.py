@@ -7,7 +7,7 @@ from stock_dict import view_stock
 import text
 from text import clear_screen
 from text import display_letter_by_letter
-amount_money=100000
+amount_money=1000000
 total_num_of_stock=0
 days=0
 stock_options=["APPLE","GOOGLE","NVIDIA"]
@@ -21,12 +21,12 @@ display_letter_by_letter("By Goblin101 and a special thanks to Gravityloops for 
 m=int(input("enter the amount of days that you want to spend on the market: "))
 days=days+m
 while True:
-  a=random.randrange(0,6000) # stock option 1 price
-  d=random.randrange(0,6000) # stock option 2 price
-  f=random.randrange(0,6000) # stock option 3 price
-  a2=random.randrange(0,6000) # stock option 1 price new
-  d2=random.randrange(0,6000) # stock option 2 price new
-  f2=random.randrange(0,6000) # stock option 3 price new
+  a=random.randrange(0,600) # stock option 1 price
+  d=random.randrange(0,600) # stock option 2 price
+  f=random.randrange(0,600) # stock option 3 price
+  a2=random.randrange(0,600) # stock option 1 price new
+  d2=random.randrange(0,600) # stock option 2 price new
+  f2=random.randrange(0,600) # stock option 3 price new
   a3=((a2-a)/a)*100
   d3=((a2-a)/a)*100
   f3=((a2-a)/a)*100
