@@ -15,7 +15,7 @@ stock_options2=["NINTENDO","TESLA","LOGITECH"]
 stock_options3=["SAMSUNG","MICROSOFT","FACEBOOK"]
 display_letter_by_letter("WELCOME TO THE STOCK MARKET")
 name=input("enter your name: ")
-display_letter_by_letter("welcome to the betting simulator!")
+display_letter_by_letter("welcome to the stock simulator!")
 display_letter_by_letter(str(name)+": "+str(amount_money))
 display_letter_by_letter("By Goblin101 and a special thanks to Gravityloops for testing this game you can find him on twitch under Gravityloops")
 m=int(input("enter the amount of days that you want to spend on the market: "))
