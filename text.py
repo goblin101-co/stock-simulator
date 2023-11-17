@@ -7,12 +7,21 @@ def clear_screen():
 
 # Function to display text letter by letter
 def display_letter_by_letter(text):
+    displayed_text = ''
     for letter in text:
-        print(letter, end='', flush=True)
+        displayed_text += letter
+        print(displayed_text, end='', flush=True)
         time.sleep(0.05)  # Adjust this delay (in seconds) to control the speed
     print()
+    return displayed_text
 
 # Example usage
-# clear_screen()  # Clear the screen
-# text_to_display = "Starting program..."
-# display_letter_by_letter(text_to_display)
+clear_screen()  # Clear the screen
+
+# Get user input
+user_input = input("Enter text: ")
+
+clear_screen()  # Clear the screen
+
+# Display user input letter by letter
+final_display = display_letter_by_letter(user_input)
