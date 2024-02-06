@@ -14,4 +14,9 @@ SPREATSHEET_ID="1EPYXbsuPgbFXJoghnMkAWnreqN253hXlf7uSXcebO-M"
 def main():
     credentials=None
     if os.path.exists("token.json"):
-        crendetials=Credentials.from_authorized_user_file("token.json", SCOPE)
+        crendetials=Credentials.from_authorized_user_file("token.json", SCOPES)
+    if not credentials or not credentials.valid:
+        if credentials and credentials.exprired and credentials.refresh_token:
+            credentials.refresh(Request())
+        else:
+            flow=InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
