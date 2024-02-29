@@ -1,7 +1,7 @@
 # stock-simulator
 
 # This project is currently being refurbished, but the changes will be completed soon! 
-# For more information on this project, view the Wiki page.
+# For more information on this project, view the [Wiki](https://github.com/goblin101-co/stock-simulator/wiki) page.
 
 1. **Game Setup:**
    - Enter the number of days you want to play and your username.
