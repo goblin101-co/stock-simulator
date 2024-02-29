@@ -25,4 +25,4 @@
 6. **End of Day Cleanup:**
    - After each day, the screen is cleared using the function `clear_screen` to maintain a tidy interface.
 7. **Music feature:**
-   - Whilst playing the game there is music playing through the use of the function 'play_music'.
+   - Whilst playing the game there is music playing through the use of the function `play_music`.
