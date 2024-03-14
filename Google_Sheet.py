@@ -20,3 +20,5 @@ def main():
             credentials.refresh(Request())
         else:
             flow=InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+        with open("token.json", "w") as token:
+            token.write(credentials.to.json())
