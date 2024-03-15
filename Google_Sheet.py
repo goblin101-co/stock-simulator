@@ -6,7 +6,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-SCOPES=["https://googleapis.com/auth/spreadsheets"]
+SCOPES=["https://www.googleapis.com/auth/spreadsheets"]
 
 SPREATSHEET_ID="1EPYXbsuPgbFXJoghnMkAWnreqN253hXlf7uSXcebO-M"
 
@@ -21,4 +21,20 @@ def main():
         else:
             flow=InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
         with open("token.json", "w") as token:
-            token.write(credentials.to.json())
+            token.write(credentials.to_json())
+    try:
+      service=build("sheets", "v4", credentials=credentials)
+      sheets=service.spreasheets()
+
+      result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range="Sheet1!A1:B2").execute()
+
+      values=result.get("values", [])
+
+      for row in values:
+          print(values)
+    except HttpError as error:
+        print(error)
+
+
+if __name__=="__main__":
+  main()
