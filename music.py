@@ -18,5 +18,5 @@ def play_music(file_path):
         pygame.mixer.quit()
 
 if __name__ == "__main__":
-    music_file = "path/to/your/music_file.mp3"  # Replace with the path to your music file
+    music_file = ""  # Replace with the path to your music file # no file in there yet, will be added after I figure out API thing
     play_music(music_file)
