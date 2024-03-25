@@ -26,3 +26,5 @@
    - After each day, the screen is cleared using the function `clear_screen` to maintain a tidy interface.
 7. **Music feature:**
    - Whilst playing the game there is music playing through the use of the function `play_music`.
+8. **Google Sheet:**
+   - Using the `credentials.json` file, the python code has access to the Google Sheets API and can edit the given google sheet.
