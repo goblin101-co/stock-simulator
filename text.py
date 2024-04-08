@@ -3,7 +3,7 @@ import os
 
 # Function to clear the output screen
 def clear_screen():
-    os.system('clear')  # For Windows, replace 'clear' with 'cls'
+    os.system('cls')  # For Windows, replace 'clear' with 'cls'
 
 # Function to display text letter by letter
 def display_letter_by_letter(text):
@@ -13,7 +13,7 @@ def display_letter_by_letter(text):
         print(displayed_text, end='', flush=True)
         time.sleep(0.05)  # Adjust this delay (in seconds) to control the speed
     print()
-    return displayed_text
+    # return displayed_text
 
 # Example usage
 clear_screen()  # Clear the screen
