@@ -14,7 +14,7 @@
 
 3. **Game Progression:**
    - The game progresses daily, with the day count decreasing.
-   - A loop continues until the specified number of days is reached.
+   - A loop continues until the specified number of days is reached, or the players networth reaches zero.
 
 4. **Smooth Output:**
    - To enhance output display, a function called `display_letter_by_letter` is used for smoother text presentation.
