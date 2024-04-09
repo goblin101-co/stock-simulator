@@ -1,6 +1,6 @@
 # stock-simulator
 
-# This project is currently being refurbished, but the changes will be completed soon! 
+# There are a lot of changes being made at the moment, but this project will hopefully be done very soon.
 # For more information on this project, view the [Wiki](https://github.com/goblin101-co/stock-simulator/wiki) page.
 
 1. **Stock Buying:**
