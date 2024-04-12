@@ -5,7 +5,8 @@ from stock_dict import sell_stock
 from stock_dict import stocks
 from stock_dict import view_stock
 amount_money=100000
-total_num_of_stock=0
+total_num_of_stock=10000
+credit_card=1000
 days=0
 stock_options=["APPLE","GOOGLE","NVIDIA"]
 stock_options2=["NINTENDO","TESLA","LOGITECH"]
@@ -31,7 +32,7 @@ while True:
   h=random.choices(stock_options2)
   t=random.choices(stock_options3)
   print("num of stocks: "+str(total_num_of_stock)+" amount of money: $"+str(amount_money)+" amount of days: "+str(days))
-  r=input("enter 'buy' if you want to buy some stocks: ")
+  r=input("enter 'buy' if you want to buy some stocks, or 'shop' if you want to purchase other things: ")
   if r=='buy':
     print("great here are all of the amazing stock that you can buy")
     print(str(g)+" $"+str(a)+" "+str(h)+" $"+str(d)+" "+str(t)+" $"+str(f))
@@ -92,3 +93,5 @@ while True:
   if amount_money<=0 and total_num_of_stock==0:
     print("you are fully bankrupt, and your portfolio is completely empty, thank you for playing! GAME OVER :'(")
     exit()
+  if r=='shop':
+    print("1. credit cards 2. ")
