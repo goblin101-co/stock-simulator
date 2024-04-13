@@ -94,4 +94,4 @@ while True:
     print("you are fully bankrupt, and your portfolio is completely empty, thank you for playing! GAME OVER :'(")
     exit()
   if r=='shop':
-    print("1. credit cards 2. ")
+    print("1. Credit cards 2. ")
