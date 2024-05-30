@@ -4,6 +4,7 @@ from stock_dict import buy_stock
 from stock_dict import sell_stock
 from stock_dict import stocks
 from stock_dict import view_stock
+import menu
 amount_money=100000
 total_num_of_stock=10000
 credit_card=1000
