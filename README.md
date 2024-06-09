@@ -1,7 +1,7 @@
 # stock-simulator
 
 # There are a lot of changes being made at the moment, but this project will hopefully be done very soon.
-# For more information on this project, view the [Wiki](https://github.com/goblin101-co/stock-simulator/wiki) page.
+# For more information on this project, view the [Wiki](https://github.com/goblin101-co/stock-simulator/wiki) page. Or read and download a paper that I wrote on this project [here](https://docs.google.com/document/d/156pYzU0MG4SugnvuF-JbkB8ZXjtws-M2yzIRPaG0TK0/edit?usp=sharing)
 
 1. **Stock Buying:**
    - Decide to buy stocks; you're shown 3 randomly generated stocks with prices.
