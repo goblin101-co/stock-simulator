@@ -5,10 +5,11 @@ from stock_dict import sell_stock
 from stock_dict import stocks
 from stock_dict import view_stock
 import menu
-amount_money=100000
-total_num_of_stock=10000
+from menu import amount_money
+from menu import total_num_of_stock
+from menu import days
+from menu import player_menu
 credit_card=1000
-days=0
 stock_options=["APPLE","GOOGLE","NVIDIA"]
 stock_options2=["NINTENDO","TESLA","LOGITECH"]
 stock_options3=["SAMSUNG","MICROSOFT","FACEBOOK"]
@@ -32,7 +33,7 @@ while True:
   g=random.choices(stock_options)
   h=random.choices(stock_options2)
   t=random.choices(stock_options3)
-  print("num of stocks: "+str(total_num_of_stock)+" amount of money: $"+str(amount_money)+" amount of days: "+str(days))
+  print(player_menu)
   r=input("enter 'buy' if you want to buy some stocks, or 'shop' if you want to purchase other things: ")
   if r=='buy':
     print("great here are all of the amazing stock that you can buy")
