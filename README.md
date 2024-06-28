@@ -21,7 +21,6 @@
 
 5. **End of Day Cleanup:**
    - After each day, the screen is cleared using the function `clear_screen` to maintain a tidy interface.
-6. **Music feature:**
-   - Whilst playing the game there is music playing through the use of the function `play_music`.
-7. **Google Sheet:**
+
+6. **Google Sheet:**
    - Using the `credentials.json` file, the python code has access to the Google Sheets API and can edit the given google sheet.
