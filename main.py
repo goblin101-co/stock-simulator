@@ -33,7 +33,7 @@ while True:
   g=random.choices(stock_options)
   h=random.choices(stock_options2)
   t=random.choices(stock_options3)
-  print(player_menu)
+  print(player_menu) # menu created separately
   r=input("enter 'buy' if you want to buy some stocks, or 'shop' if you want to purchase other things: ")
   if r=='buy':
     print("great here are all of the amazing stock that you can buy")
