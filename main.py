@@ -9,6 +9,8 @@ from menu import amount_money
 from menu import total_num_of_stock
 from menu import days
 from menu import player_menu
+import text
+from text import clear_screen
 credit_card=1000
 stock_options=["APPLE","GOOGLE","NVIDIA"]
 stock_options2=["NINTENDO","TESLA","LOGITECH"]
@@ -87,6 +89,7 @@ while True:
       if q=='':
         print("ok see you tommorrow")
         days=days-1
+        clear_screen()
   if days==0:
     print("You have no more days left we hope to see you again soon")
     exit()
