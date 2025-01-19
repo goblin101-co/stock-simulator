@@ -100,3 +100,4 @@ while True:
     exit()
   if r=='shop':
     print("1. Credit cards 2. ")
+    # finish the API part first, and then add smaller features that are easy to add.
