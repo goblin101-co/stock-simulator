@@ -14,8 +14,3 @@ def upsert_record(table, record, keys):
     :param keys: A list of keys to identify the record for upsert.
     """
     table.upsert(record, keys)
-
-
-table.insert(dict(stock_name="APPL", price=1112, quant=3))
-
-table.delete(name='John Doe')
