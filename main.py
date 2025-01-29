@@ -2,7 +2,6 @@ import random
 import stock_dict
 from stock_dict import buy_stock
 from stock_dict import sell_stock
-from stock_dict import stocks
 from stock_dict import view_stock
 import menu
 from menu import amount_money
@@ -63,7 +62,6 @@ while True:
     x=input("do you want to sell any of your stock? write y, n: ")
     if x=='y':
       print("ok")
-      print(stocks)
       z=str(input("which stock do you wish to sell?: "))
       if z=="APPLE" or z=="GOOGLE" or z=="NVIDIA":
         view_stock(z,p,round(a3,2))
