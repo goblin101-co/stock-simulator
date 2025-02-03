@@ -37,3 +37,6 @@ def view_stock(stock_name):
             print(f"{stock_name}: {shares} shares, {price}%")
     else:
         print(f"No record found for {stock_name}.")
+
+# Creates Database within file
+# Adds stocks to the database instead of the dictionary through functions

@@ -7,4 +7,4 @@
 - All you need to do is download an app called DB Browser (SQLite)
 - You then open the program and click "Open Database" --> then Browse Data
 ## Setup returning players
-- You just attach your db file,
+- The game should recognize that there is a returning user, due to the name being saved in the .db file

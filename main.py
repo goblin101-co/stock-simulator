@@ -1,8 +1,8 @@
 import random
-import stock_dict
-from stock_dict import buy_stock
-from stock_dict import sell_stock
-from stock_dict import view_stock
+import stock_buy
+from stock_buy import buy_stock
+from stock_buy import sell_stock
+from stock_buy import view_stock
 import menu
 from menu import amount_money
 from menu import total_num_of_stock
