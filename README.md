@@ -3,8 +3,9 @@
 - Coming soon!
 
 ## Setup new players
-- The .db file gets created for you by running the program
-- All you need to do is download an app called DB Browser (SQLite)
-- You then open the program and click "Open Database" --> then Browse Data
+- Running the program will create a .db file
+- Data is added in real time
+
 ## Setup returning players
-- The game should recognize that there is a returning user, due to the name being saved in the .db file
+- Attach your .db file and the program will register your name
+- Run the code, and you will be back where you were
