@@ -1,8 +1,8 @@
 import random
 import stock_buy
+import time
 from stock_buy import buy_stock
 from stock_buy import sell_stock
-from stock_buy import view_stock
 import menu
 from menu import amount_money
 from menu import total_num_of_stock
@@ -12,13 +12,11 @@ import text
 from text import clear_screen
 from text import typewriter_effect
 from text import typewriter_input
-credit_card=1000
 stock_options=["APPLE","GOOGLE","NVIDIA"]
 stock_options2=["NINTENDO","TESLA","LOGITECH"]
 stock_options3=["SAMSUNG","MICROSOFT","FACEBOOK"]
 typewriter_effect("WELCOME TO THE STOCK MARKET", 0.05)
 name=typewriter_input(("enter your name: "))
-typewriter_effect("welcome to the stock simulator!", 0.05)
 typewriter_effect(str(name)+": "+str(amount_money))
 typewriter_effect("By Goblin101 and a special thanks to Gravityloops for testing this game you can find him on twitch under Gravityloops", 0.05)
 m=int(typewriter_input("enter the amount of days that you want to spend on the market: "))
@@ -66,19 +64,16 @@ while True:
       typewriter_effect("ok", 0.05)
       z=str(typewriter_input("which stock do you wish to sell?: "))
       if z=="APPLE" or z=="GOOGLE" or z=="NVIDIA":
-        view_stock(z,p,round(a3,2))
         y=int(typewriter_input("enter the number of shares that you want to sell: "))
         total_num_of_stock=total_num_of_stock-y
         sell_stock(z,y,a2)
         amount_money=amount_money+(y*a2)
       elif z=="NINTENDO" or z=="TESLA" or z=="LOGITECH":
-        view_stock(z,p,round(d3,2))
         y=int(typewriter_input("enter the number of shares that you want to sell: "))
         total_num_of_stock=total_num_of_stock-y
         sell_stock(z,y,d2)
         amount_money=amount_money+(y*d2)
       elif z=="SAMSUNG" or z=="MICROSOFT" or z=="FACEBOOK":
-        view_stock(z,p,round(f3,2))
         y=int(typewriter_input("enter the number of shares that you want to sell: "))
         total_num_of_stock=total_num_of_stock-y
         sell_stock(z,y,f2)

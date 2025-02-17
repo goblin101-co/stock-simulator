@@ -3,7 +3,11 @@ import dataset
 # Connect to the database
 db = dataset.connect('sqlite:///stock_portfolio.db')
 table = db['Stock_Portfolio']
-
+"""
+when buying stocks the programme checks if the stock is already in the database.
+If yes then it adds the number of shares to the existing number of shares, and updates the quantity and price.
+If no then it creates a new record in the database.
+"""
 def buy_stock(stock_name, shares, price):
     record = table.find_one(stock_name=stock_name)
     if record:
@@ -13,7 +17,11 @@ def buy_stock(stock_name, shares, price):
     else:
         table.insert(dict(stock_name=stock_name, shares=shares, price=price))
     print(f"Bought {shares} shares of {stock_name} at {price} per share.")
-
+"""
+when selling stocks the programme checks if the stock is already in the database.
+If yes then it subtracts the number of stocks from the existing number of stocks, and updates the quantity and price.
+If no then it prints a message saying that the user does not have any shares of that stock.
+"""
 def sell_stock(stock_name, shares, price):
     record = table.find_one(stock_name=stock_name)
     if record:
@@ -25,18 +33,3 @@ def sell_stock(stock_name, shares, price):
             print(f"You don't have enough shares of {stock_name} to sell.")
     else:
         print(f"You don't have any shares of {stock_name}.")
-
-def view_stock(stock_name):
-    record = table.find_one(stock_name=stock_name)
-    if record:
-        shares = record['shares']
-        price = record['price']
-        if price > 0:
-            print(f"{stock_name}: {shares} shares, +{price}%")
-        else:
-            print(f"{stock_name}: {shares} shares, {price}%")
-    else:
-        print(f"No record found for {stock_name}.")
-
-# Creates Database within file
-# Adds stocks to the database instead of the dictionary through functions
