@@ -16,8 +16,10 @@ def buy_stock(stock_name, shares, price):
         record['shares'] += shares
         record['price'] = price
         portfolio_table.update(record, ['stock_name'])
+        db.commit()
     else:
         portfolio_table.insert(dict(stock_name=stock_name, shares=shares, price=price))
+        db.commit()
     print(f"Bought {shares} shares of {stock_name} at {price} per share.")
 
 """

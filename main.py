@@ -3,6 +3,8 @@ import stock_buy
 import time
 from stock_buy import buy_stock
 from stock_buy import sell_stock
+from stock_buy import initialize_player
+from stock_buy import update_days
 import menu
 from menu import amount_money
 from menu import total_num_of_stock
@@ -20,7 +22,8 @@ name=typewriter_input(("enter your name: "))
 typewriter_effect(str(name)+": "+str(amount_money))
 typewriter_effect("By Goblin101 and a special thanks to Gravityloops for testing this game you can find him on twitch under Gravityloops", 0.05)
 m=int(typewriter_input("enter the amount of days that you want to spend on the market: "))
-days=days+m
+days = m
+initialize_player(name, days)
 while True:
   a=random.randrange(0,600) # stock option 1 price
   d=random.randrange(0,600) # stock option 2 price
@@ -83,8 +86,10 @@ while True:
       q=typewriter_input(("ok the day is over press ENTER to go to the next day: "))
       if q=='':
         typewriter_effect("ok see you tommorrow", 0.05)
-        days=days-1
+        days -= 1
         clear_screen()
+        update_days(name)
+        menu.days = days # Update the days variable in menu.py
   if days==0:
     typewriter_effect("You have no more days left we hope to see you again soon", 0.05)
     exit()
