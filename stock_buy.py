@@ -1,3 +1,4 @@
+stocks = {}
 import dataset
 
 # Connect to the database
@@ -12,12 +13,14 @@ If no, it creates a new record in the database.
 """
 def buy_stock(stock_name, shares, price):
     record = portfolio_table.find_one(stock_name=stock_name)
-    if record:
+    if record and stock_name in stocks:
+        stocks[stock_name]['shares'] += shares
         record['shares'] += shares
         record['price'] = price
         portfolio_table.update(record, ['stock_name'])
         db.commit()
     else:
+        stocks[stock_name] = {'shares': shares, 'price': price}
         portfolio_table.insert(dict(stock_name=stock_name, shares=shares, price=price))
         db.commit()
     print(f"Bought {shares} shares of {stock_name} at {price} per share.")
@@ -29,7 +32,8 @@ If no, it prints a message saying the user does not own any shares of that stock
 """
 def sell_stock(stock_name, shares, price):
     record = portfolio_table.find_one(stock_name=stock_name)
-    if record:
+    if record and stock_name in stocks:
+        stocks[stock_name]['shares'] -= shares
         if record['shares'] >= shares:
             record['shares'] -= shares
             portfolio_table.update(record, ['stock_name'])
@@ -50,6 +54,16 @@ def initialize_player(name, days):
         player_table.update(player, ['name'])
     else:
         player_table.insert(dict(name=name, days_remaining=days))
+
+"""
+Prints the stock name, and number of shares and price.
+Changes if negative or positive.
+"""
+def view_stock(stock_name, shares, price):
+    if price>0:
+        print(f"{stock_name}:{shares} +{price}%")
+    else:
+        print(f"{stock_name}:{shares} {price}%")
 
 """
 Decrease the player's remaining days by 1.
