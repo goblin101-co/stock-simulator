@@ -16,35 +16,32 @@ manager = pygame_gui.UIManager(WINDOW_SIZE)
 clock = pygame.time.Clock()
 
 # Global state variables
-amount_money = menu.amount_money  # 100000
-total_num_of_stock = menu.total_num_of_stock  # 0
+amount_money = menu.amount_money  # e.g. 100000
 days = 0  # Will be set by the player
 player_name = ""
+portfolio = {}  # Dictionary tracking stocks owned; keys are stock names, values are number of shares
 
 # Define stock groups (each group shares the same price today)
 stock_options = ["APPLE", "GOOGLE", "NVIDIA"]
 stock_options2 = ["NINTENDO", "TESLA", "LOGITECH"]
 stock_options3 = ["SAMSUNG", "MICROSOFT", "FACEBOOK"]
 
-# Single daily price for each group (used for both buying and selling)
+# Daily stock prices for each group
 group1_price = 0
 group2_price = 0
 group3_price = 0
 
-# All stocks for the dropdown menus
+# Dropdown for buying (selling will be built from the portfolio)
 display_buy_options = []
-display_sell_options = []
 
 def update_stock_prices():
-    global group1_price, group2_price, group3_price
+    global group1_price, group2_price, group3_price, display_buy_options
     group1_price = random.randint(100, 600)
     group2_price = random.randint(100, 600)
     group3_price = random.randint(100, 600)
     combined = stock_options + stock_options2 + stock_options3
     random.shuffle(combined)
-    global display_buy_options, display_sell_options
-    display_buy_options = combined[:]
-    display_sell_options = combined[:]
+    display_buy_options = combined[:]  # For buying, show all stocks
 
 def refresh_stock_display():
     stock_text = "<b>Today's Stock Prices:</b><br>"
@@ -56,6 +53,19 @@ def refresh_stock_display():
         stock_text += f"{stock}: ${group3_price}<br>"
     stock_label.html_text = stock_text
     stock_label.rebuild()
+
+def get_stock_price(selected_stock):
+    if selected_stock in stock_options:
+        return group1_price
+    elif selected_stock in stock_options2:
+        return group2_price
+    else:
+        return group3_price
+
+def update_total_stocks_label():
+    # Compute total stocks by summing all values in portfolio.
+    total = sum(portfolio.values())
+    total_stocks_label.set_text(f"Total Stocks: {total}")
 
 class GameButton:
     def __init__(self, rect, text, manager, action, attributes=None, container=None):
@@ -119,9 +129,17 @@ game_panel = pygame_gui.elements.UIPanel(
     manager=manager,
     visible=False
 )
+# Info label on top left
 info_label = pygame_gui.elements.UILabel(
     relative_rect=pygame.Rect((10, 10), (400, 50)),
     text="",
+    manager=manager,
+    container=game_panel
+)
+# Total Stocks label on top right
+total_stocks_label = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect((600, 10), (190, 50)),
+    text="Total Stocks: 0",
     manager=manager,
     container=game_panel
 )
@@ -180,6 +198,10 @@ def show_buy_modal():
 
 def show_sell_modal():
     global sell_modal
+    # Only allow selling if the portfolio is not empty.
+    if not portfolio:
+        info_label.set_text("No stocks in portfolio to sell.")
+        return
     sell_modal = pygame_gui.elements.UIWindow(
         rect=pygame.Rect((250, 200), (300, 200)),
         manager=manager,
@@ -191,9 +213,10 @@ def show_sell_modal():
         manager=manager,
         container=sell_modal
     )
+    # Build dropdown options from portfolio keys only.
     sell_stock_dropdown = pygame_gui.elements.UIDropDownMenu(
-        options_list=display_sell_options,
-        starting_option=display_sell_options[0],
+        options_list=list(portfolio.keys()),
+        starting_option=list(portfolio.keys())[0],
         relative_rect=pygame.Rect((120, 10), (150, 30)),
         manager=manager,
         container=sell_modal
@@ -263,7 +286,7 @@ while is_running:
                         pygame.time.delay(2000)
                         is_running = False
                     else:
-                        info_label.set_text(f"Player: {player_name} | Money: ${amount_money} | Days left: {days} | Total Stocks: {total_num_of_stock}")
+                        info_label.set_text(f"Player: {player_name} | Money: ${amount_money} | Days left: {days}")
                 else:
                     info_label.set_text("No days left. Cannot advance.")
 
@@ -279,22 +302,24 @@ while is_running:
                             shares = int(shares_entry.get_text())
                         except ValueError:
                             shares = 0
-                        if selected_stock in stock_options:
-                            price = group1_price
-                        elif selected_stock in stock_options2:
-                            price = group2_price
-                        else:
-                            price = group3_price
+                        price = get_stock_price(selected_stock)
                         cost = price * shares
                         if cost <= amount_money and shares > 0:
-                            amount_money -= cost
-                            buy_stock(selected_stock, shares, price)
-                            total_num_of_stock += shares
-                            info_label.set_text(f"Bought {shares} of {selected_stock} at ${price} each.")
+                            print(f"Buying: {selected_stock}, Shares: {shares}, Price: {price}, Money: {amount_money}")
+                            try:
+                                buy_stock(selected_stock, shares, price)
+                                amount_money -= cost
+                                # Update portfolio: add shares
+                                portfolio[selected_stock] = portfolio.get(selected_stock, 0) + shares
+                                info_label.set_text(f"Bought {shares} of {selected_stock} at ${price} each.")
+                            except Exception as e:
+                                print(f"Error in buy_stock: {e}")
+                                info_label.set_text("Error: Could not complete purchase.")
                         else:
                             info_label.set_text("Insufficient funds or invalid share number.")
                         buy_modal.kill()
                         buy_modal = None
+                        update_total_stocks_label()
 
                 elif "#confirm_sell_button" in object_ids:
                     if sell_modal is not None:
@@ -305,24 +330,32 @@ while is_running:
                             shares = int(shares_entry.get_text())
                         except ValueError:
                             shares = 0
-                        if selected_stock in stock_options:
-                            price = group1_price
-                        elif selected_stock in stock_options2:
-                            price = group2_price
+                        # Verify sufficient shares exist in portfolio
+                        if selected_stock not in portfolio or portfolio[selected_stock] < shares or shares <= 0:
+                            info_label.set_text("Insufficient shares to sell.")
                         else:
-                            price = group3_price
-                        sell_stock(selected_stock, shares, price)
-                        amount_money += price * shares
-                        total_num_of_stock -= shares
-                        info_label.set_text(f"Sold {shares} of {selected_stock} at ${price} each.")
+                            price = get_stock_price(selected_stock)
+                            print(f"Selling: {selected_stock}, Shares: {shares}, Price: {price}")
+                            try:
+                                sell_stock(selected_stock, shares, price)
+                                amount_money += price * shares
+                                portfolio[selected_stock] -= shares
+                                if portfolio[selected_stock] <= 0:
+                                    del portfolio[selected_stock]
+                                info_label.set_text(f"Sold {shares} of {selected_stock} at ${price} each.")
+                            except Exception as e:
+                                print(f"Error in sell_stock: {e}")
+                                info_label.set_text("Error: Could not complete sale.")
                         sell_modal.kill()
                         sell_modal = None
+                        update_total_stocks_label()
 
         manager.process_events(event)
     manager.update(time_delta)
 
     if game_state == "game":
-        info_label.set_text(f"Player: {player_name} | Money: ${amount_money} | Days left: {days} | Total Stocks: {total_num_of_stock}")
+        info_label.set_text(f"Player: {player_name} | Money: ${amount_money} | Days left: {days}")
+        update_total_stocks_label()
 
     window_surface.fill(pygame.Color('#000000'))
     manager.draw_ui(window_surface)
