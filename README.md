@@ -3,8 +3,10 @@
 - Coming soon!
 
 ## Setup new players
-- Running the program will create a .db file
-- Data is added in real time
+- Download the .exe file
+- Start the game
+- Starting the game you will create your account credentials
+- These will be saved on the server and will be associated to your player ID  
 
 ## Setup returning players
 - Attach your .db file and the program will register your name
