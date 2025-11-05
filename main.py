@@ -1,192 +1,104 @@
-import pygame
-import pygame_gui
 import random
-import sys
-import sqlite3
-import dataset
-import json
 import stock_buy
-from stock_buy import buy_stock, sell_stock, initialize_player, update_days
-
-# Initialize pygame
-pygame.init()
-pygame.display.set_caption('Stock Simulator Game')
-WINDOW_SIZE = (800, 600)
-window_surface = pygame.display.set_mode(WINDOW_SIZE)
-manager = pygame_gui.UIManager(WINDOW_SIZE)
-clock = pygame.time.Clock()
-
-# Connect to existing database
-db = dataset.connect('sqlite:///stock_portfolio.db')
-player_table = db['Player']
-portfolio_table = db['Stock_Portfolio']
-
-# Global state
-player_name = ""
-days = 0
-amount_money = 100000
-
-# Stock setup
-stock_options = ["APPLE", "GOOGLE", "NVIDIA"]
-stock_options2 = ["NINTENDO", "TESLA", "LOGITECH"]
-stock_options3 = ["SAMSUNG", "MICROSOFT", "FACEBOOK"]
-group1_price = group2_price = group3_price = 0
-display_buy_options = []
-
-# Game state
-game_state = "login"
-buy_modal = None
-sell_modal = None
-
-# UI Panels
-login_panel = pygame_gui.elements.UIPanel(pygame.Rect((200, 150), (400, 300)), manager)
-name_input = pygame_gui.elements.UITextEntryLine(pygame.Rect((150, 70), (200, 30)), manager, login_panel)
-days_input = pygame_gui.elements.UITextEntryLine(pygame.Rect((150, 120), (200, 30)), manager, login_panel)
-login_button = pygame_gui.elements.UIButton(pygame.Rect((150, 180), (100, 50)), "Start Game", manager, login_panel)
-
-# Game panel
-game_panel = pygame_gui.elements.UIPanel(pygame.Rect((0, 0), (800, 600)), manager, visible=False)
-info_label = pygame_gui.elements.UILabel(pygame.Rect((10, 10), (400, 50)), "", manager, game_panel)
-total_stocks_label = pygame_gui.elements.UILabel(pygame.Rect((600, 10), (190, 50)), "Total Stocks: 0", manager, game_panel)
-stock_label = pygame_gui.elements.UITextBox("", pygame.Rect((10, 70), (780, 200)), manager, game_panel)
-
-# Buttons
-buy_button = pygame_gui.elements.UIButton(pygame.Rect((50, 500), (100, 50)), "Buy", manager, game_panel)
-sell_button = pygame_gui.elements.UIButton(pygame.Rect((200, 500), (100, 50)), "Sell", manager, game_panel)
-next_day_button = pygame_gui.elements.UIButton(pygame.Rect((350, 500), (150, 50)), "Next Day", manager, game_panel)
-
-# Utility Functions
-def update_stock_prices():
-    global group1_price, group2_price, group3_price, display_buy_options
-    group1_price = random.randint(100, 600)
-    group2_price = random.randint(100, 600)
-    group3_price = random.randint(100, 600)
-    display_buy_options = stock_options + stock_options2 + stock_options3
-
-def refresh_stock_display():
-    stock_text = "<b>Today's Stock Prices:</b><br>"
-    for stock in stock_options:
-        stock_text += f"{stock}: ${group1_price}<br>"
-    for stock in stock_options2:
-        stock_text += f"{stock}: ${group2_price}<br>"
-    for stock in stock_options3:
-        stock_text += f"{stock}: ${group3_price}<br>"
-    stock_label.html_text = stock_text
-    stock_label.rebuild()
-
-def get_stock_price(stock):
-    if stock in stock_options:
-        return group1_price
-    elif stock in stock_options2:
-        return group2_price
-    else:
-        return group3_price
-
-def update_total_stocks():
-    total = sum(stock['shares'] for stock in stock_buy.stocks.values())
-    total_stocks_label.set_text(f"Total Stocks: {total}")
-
-def show_buy_modal():
-    global buy_modal
-    buy_modal = pygame_gui.elements.UIWindow(pygame.Rect((250, 200), (300, 200)), manager, window_display_title="Buy Stock")
-    dropdown = pygame_gui.elements.UIDropDownMenu(display_buy_options, display_buy_options[0], pygame.Rect((120, 10), (150, 30)), manager, buy_modal)
-    entry = pygame_gui.elements.UITextEntryLine(pygame.Rect((120, 60), (150, 30)), manager, buy_modal)
-    confirm = pygame_gui.elements.UIButton(pygame.Rect((100, 120), (100, 40)), "Confirm", manager, buy_modal, object_id="#confirm_buy_button")
-    buy_modal.user_data = {"dropdown": dropdown, "entry": entry}
-
-def show_sell_modal():
-    global sell_modal
-    options = [s for s in stock_buy.stocks if stock_buy.stocks[s]['shares'] > 0]
-    if not options:
-        info_label.set_text("No stocks to sell.")
-        return
-    sell_modal = pygame_gui.elements.UIWindow(pygame.Rect((250, 200), (300, 200)), manager, window_display_title="Sell Stock")
-    dropdown = pygame_gui.elements.UIDropDownMenu(options, options[0], pygame.Rect((120, 10), (150, 30)), manager, sell_modal)
-    entry = pygame_gui.elements.UITextEntryLine(pygame.Rect((120, 60), (150, 30)), manager, sell_modal)
-    confirm = pygame_gui.elements.UIButton(pygame.Rect((100, 120), (100, 40)), "Confirm", manager, sell_modal, object_id="#confirm_sell_button")
-    sell_modal.user_data = {"dropdown": dropdown, "entry": entry}
-
-# Main loop
+import time
+from stock_buy import buy_stock
+from stock_buy import sell_stock
+from stock_buy import initialize_player
+from stock_buy import update_days
+import menu
+from menu import amount_money
+from menu import total_num_of_stock
+from menu import days
+from menu import player_menu
+import text
+from text import clear_screen
+from text import typewriter_effect
+from text import typewriter_input
+stock_options=["APPLE","GOOGLE","NVIDIA"]
+stock_options2=["NINTENDO","TESLA","LOGITECH"]
+stock_options3=["SAMSUNG","MICROSOFT","FACEBOOK"]
+typewriter_effect("WELCOME TO THE STOCK MARKET", 0.05)
+name=typewriter_input(("enter your name: "))
+typewriter_effect(str(name)+": "+str(amount_money))
+typewriter_effect("By Goblin101 and a special thanks to Gravityloops for testing this game you can find him on twitch under Gravityloops", 0.05)
+m=int(typewriter_input("enter the amount of days that you want to spend on the market: "))
+days = m
+initialize_player(name, days)
 while True:
-    time_delta = clock.tick(60) / 1000.0
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+  a=random.randrange(0,600) # stock option 1 price
+  d=random.randrange(0,600) # stock option 2 price
+  f=random.randrange(0,600) # stock option 3 price
+  a2=random.randrange(0,600) # stock option 1 price new
+  d2=random.randrange(0,600) # stock option 2 price new
+  f2=random.randrange(0,600) # stock option 3 price new
+  a3=((a2-a)/a)*100
+  d3=((a2-a)/a)*100
+  f3=((a2-a)/a)*100
+  g=random.choices(stock_options)
+  h=random.choices(stock_options2)
+  t=random.choices(stock_options3)
+  typewriter_effect(player_menu, 0.05) # menu created separately
+  r=typewriter_input("enter 'buy' if you want to buy some stocks, or 'shop' if you want to purchase other things: ")
+  if r=='buy':
+    typewriter_effect("great here are all of the amazing stock that you can buy", 0.05)
+    typewriter_effect(str(g)+" $"+str(a)+" "+str(h)+" $"+str(d)+" "+str(t)+" $"+str(f), 0.05)
+    typewriter_effect("enter the name of the stock that you want to buy: ", 0.05)
+    c=typewriter_input()
+    if c=="APPLE" or c=="GOOGLE" or c=="NVIDIA":
+      p=int(typewriter_input("enter the number you want to buy of the stock: "))
+      amount_money=amount_money-(a*p)
+      buy_stock(c,p,a)
+      total_num_of_stock=total_num_of_stock+p
+      typewriter_effect(player_menu, 0.05)
+    elif c=="NINTENDO" or c=="TESLA" or c=="LOGITECH":
+      p=int(typewriter_input("enter the number you want to buy of the stock: "))
+      amount_money=amount_money-(d*p)
+      buy_stock(c,p,d)
+      total_num_of_stock=total_num_of_stock+p
+      typewriter_effect(player_menu, 0.05)
+    elif c=="SAMSUNG" or c=="MICROSOFT" or c=="FACEBOOK":
+      p=int(typewriter_input("enter the number you want to buy of the stock: "))
+      amount_money=amount_money-(f*p)
+      buy_stock(c,p,f)
+      total_num_of_stock=total_num_of_stock+p
+      typewriter_effect(player_menu, 0.05)
+    x=typewriter_input("do you want to sell any of your stock? write y, n: ")
+    if x=='y':
+      typewriter_effect("ok", 0.05)
+      z=str(typewriter_input("which stock do you wish to sell?: "))
+      if z=="APPLE" or z=="GOOGLE" or z=="NVIDIA":
+        y=int(typewriter_input("enter the number of shares that you want to sell: "))
+        total_num_of_stock=total_num_of_stock-y
+        sell_stock(z,y,a2)
+        amount_money=amount_money+(y*a2)
+      elif z=="NINTENDO" or z=="TESLA" or z=="LOGITECH":
+        y=int(typewriter_input("enter the number of shares that you want to sell: "))
+        total_num_of_stock=total_num_of_stock-y
+        sell_stock(z,y,d2)
+        amount_money=amount_money+(y*d2)
+      elif z=="SAMSUNG" or z=="MICROSOFT" or z=="FACEBOOK":
+        y=int(typewriter_input("enter the number of shares that you want to sell: "))
+        total_num_of_stock=total_num_of_stock-y
+        sell_stock(z,y,f2)
+        amount_money=amount_money+(y*f2)
+    if x=='n':
+      typewriter_effect("ok", 0.05)
+      q=typewriter_input(("ok the day is over press ENTER to go to the next day: "))
+      if q=='':
+        typewriter_effect("ok see you tommorrow", 0.05)
+        days -= 1
+        clear_screen()
+        update_days(name)
+        menu.days = days # Update the days variable in menu.py
+  if days==0:
+    typewriter_effect("You have no more days left we hope to see you again soon", 0.05)
+    exit()
+  if amount_money<=0 and total_num_of_stock>0:
+    typewriter_effect("You are bankrupt sell your stock to buy more", 0.05)
+  if amount_money<=0 and total_num_of_stock==0:
+    typewriter_effect("you are fully bankrupt, and your portfolio is completely empty, thank you for playing! GAME OVER :'(", 0.05)
+    exit()
+  if r=='shop':
+    typewriter_effect("1. Credit cards 2. ", 0.05)
 
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            if event.ui_element == login_button:
-                player_name = name_input.get_text().strip()
-                try:
-                    days = int(days_input.get_text().strip())
-                except ValueError:
-                    days = 10
-                if not player_name:
-                    continue
-                initialize_player(player_name, days)
-                login_panel.hide()
-                game_panel.show()
-                update_stock_prices()
-                refresh_stock_display()
-
-            elif event.ui_element == buy_button:
-                show_buy_modal()
-
-            elif event.ui_element == sell_button:
-                show_sell_modal()
-
-            elif event.ui_element == next_day_button:
-                if days > 0:
-                    days -= 1
-                    update_days(player_name)
-                    update_stock_prices()
-                    refresh_stock_display()
-                else:
-                    info_label.set_text("No days left.")
-
-            elif hasattr(event.ui_element, 'get_object_ids'):
-                if '#confirm_buy_button' in event.ui_element.get_object_ids():
-                    dropdown = buy_modal.user_data["dropdown"]
-                    entry = buy_modal.user_data["entry"]
-                    stock = dropdown.selected_option
-                    try:
-                        shares = int(entry.get_text())
-                        price = get_stock_price(stock)
-                        buy_stock(stock, shares, price)
-                        info_label.set_text(f"Bought {shares} shares of {stock}.")
-                    except:
-                        info_label.set_text("Error during purchase.")
-                    buy_modal.kill()
-                    update_total_stocks()
-
-                elif '#confirm_sell_button' in event.ui_element.get_object_ids():
-                    dropdown = sell_modal.user_data["dropdown"]
-                    entry = sell_modal.user_data["entry"]
-                    stock = dropdown.selected_option
-                    try:
-                        shares = int(entry.get_text())
-                        if shares <= stock_buy.stocks[stock]['shares']:
-                            price = get_stock_price(stock)
-                            sell_stock(stock, shares, price)
-                            info_label.set_text(f"Sold {shares} shares of {stock}.")
-                        else:
-                            info_label.set_text("Not enough shares to sell.")
-                    except:
-                        info_label.set_text("Error during sale.")
-                    sell_modal.kill()
-                    update_total_stocks()
-
-        manager.process_events(event)
-    manager.update(time_delta)
-
-    if game_panel.visible:
-        info_label.set_text(f"Player: {player_name} | Money: ${amount_money} | Days left: {days}")
-        update_total_stocks()
-
-    window_surface.fill(pygame.Color('#000000'))
-    manager.draw_ui(window_surface)
-    pygame.display.update()
-
-
-
-    # Not even far from being done yet!
+# Add documentation to this file
