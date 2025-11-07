@@ -99,14 +99,14 @@ while True:
     typewriter_effect("you are fully bankrupt, and your portfolio is completely empty, thank you for playing! GAME OVER :'(", 0.05)
     exit()
   if r=='shop':
-    typewriter_effect("1. Credit cards 2. Loans 3. Bank accounts 4. Games", 0.05)
+    typewriter_input("1. Credit cards 2. Loans 3. Bank accounts 4. Games", 0.05)
     if r == '1':
-      typewriter_effect("Credit cards: 1. Normal", 0.05)
+      typewriter_input("Credit cards: 1. Normal", 0.05)
     elif r == '2':
-      typewriter_effect("Loans: 1.  2.  3. ", 0.05) # Need interest rates as well afterwards
+      typewriter_input("Loans: 1.  2.  3. ", 0.05) # Need interest rates as well afterwards
     elif r == '3':
-      typewriter_effect("Bank accounts: 1. Savings Account", 0.05) # You can add money to an account, with interest added as well.
+      typewriter_input("Bank accounts: 1. Savings Account", 0.05) # You can add money to an account, with interest added as well.
     elif r == '4':
-      typewriter_effect("Games: 1. Spaceshooter game --> $1,000,000,000.00 ", 0.05)
+      typewriter_input("Games: 1. Spaceshooter game --> $1,000,000,000.00 ", 0.05)
 
 # Add documentation to this file
