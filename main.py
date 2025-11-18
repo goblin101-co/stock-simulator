@@ -1,10 +1,10 @@
 import random
-import stock_buy
+import database
 import time
-from stock_buy import buy_stock
-from stock_buy import sell_stock
-from stock_buy import initialize_player
-from stock_buy import update_days
+from database import buy_stock
+from database import sell_stock
+from database import initialize_player
+from database import update_days
 import menu
 from menu import amount_money
 from menu import total_num_of_stock
@@ -108,5 +108,9 @@ while True:
       typewriter_input("Bank accounts: 1. Savings Account", 0.05) # You can add money to an account, with interest added as well.
     elif r == '4':
       typewriter_input("Games: 1. Spaceshooter game --> $1,000,000,000.00 ", 0.05)
+      if amount_money>=1000000000:
+        amount_money=amount_money-1000000000
+        typewriter_effect("You have purchased the game! Enjoy!", 0.05)
+        typewriter_effect("Here is the link: https://rsaks29.github.io/spaceshooter.github.io/Shop/actualgame.html", 0.05)
 
 # Add documentation to this file

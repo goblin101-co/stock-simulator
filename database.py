@@ -76,3 +76,7 @@ def update_days(name):
         player_table.update(player, ['name'])
         return player['days_remaining']
     return None
+
+"""
+Adds password to player data in database.
+"""
