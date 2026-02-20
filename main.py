@@ -1,6 +1,6 @@
 import random
-import database
 import time
+import database
 from database import buy_stock
 from database import sell_stock
 from database import initialize_player
@@ -14,6 +14,8 @@ import text
 from text import clear_screen
 from text import typewriter_effect
 from text import typewriter_input
+import shop
+# shop functions or variables will go here
 stock_options=["APPLE","GOOGLE","NVIDIA"]
 stock_options2=["NINTENDO","TESLA","LOGITECH"]
 stock_options3=["SAMSUNG","MICROSOFT","FACEBOOK"]
